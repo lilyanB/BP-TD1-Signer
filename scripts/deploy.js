@@ -1,4 +1,4 @@
-const API_KEY = process.env.API_KEY;
+const API_KEY_goerli = process.env.API_KEY_goerli;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const ERC721_CONTRACT_ADDRESS = process.env.ERC721_CONTRACT_ADDRESS;
 const Minter_CONTRACT_ADDRESS = process.env.Minter_CONTRACT_ADDRESS;
@@ -16,11 +16,11 @@ async function main() {
 
   console.log(`ERC721 deployed to ${myERC721.address}`); */
 
-  /* const Minter = await ethers.getContractFactory("Minter");
+  const Minter = await ethers.getContractFactory("Minter");
   const minter = await Minter.deploy();
   await minter.deployed();
 
-  console.log(`Minter deployed to ${minter.address}`); */
+  console.log(`Minter deployed to ${minter.address}`);
 }
 
 main()

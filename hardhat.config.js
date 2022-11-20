@@ -6,7 +6,7 @@ const { PRIVATE_KEY, API_URL_goerli, API_URL_mumbai } = process.env;
 
 module.exports = {
    solidity: "0.8.1",
-   defaultNetwork: "polygon_mumbai",
+   defaultNetwork: "goerli",
    networks: {
       hardhat: {},
       polygon_mumbai: {

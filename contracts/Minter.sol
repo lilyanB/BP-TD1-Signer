@@ -3,29 +3,25 @@
 pragma solidity ^0.8.1;
 
 //import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-
-interface IERC721 {
-    function mint(address to, uint256 tokenId) external view;
-}
+import "./MyCollectible.sol";
 
 contract Minter {
-    address owner = msg.sender;
-    address ERC721 = msg.sender;
-    mapping(address => bool) whitelistedAddresses;
+    address public owner;
+    mapping(address => bool) public whitelistedAddresses;
+    MyCollectible public erc721;
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can call this function.");
-        _;
+    constructor () {
+        erc721 = new MyCollectible("MyCollectible", "symbole");
+        whitelistedAddresses[msg.sender] = true;
+        owner = msg.sender;
     }
 
-    function changeERC721(address newERC721) public onlyOwner {
-        ERC721 = newERC721;
+    function ERC721Address() public view returns (address) {
+        return address(erc721);
     }
 
-    function mintATokenForMe() public view {
-        IERC721 MyERC721 = IERC721(ERC721);
-        address to = msg.sender;
-        MyERC721.mint(to, 1);
+    function mintATokenForMe() external returns (uint256){
+        return erc721.mint(msg.sender);
     }
 
     function getAddressFromSignature(bytes32 _hash, bytes memory _signature)
@@ -73,8 +69,10 @@ contract Minter {
         }
     }
 
-    function addUser(address _addressToWhitelist) public onlyOwner {
+    function addUser(address _addressToWhitelist) public returns(bool){
+        require(msg.sender == owner, "Only minter can call this function.");
         whitelistedAddresses[_addressToWhitelist] = true;
+        return whitelistedAddresses[_addressToWhitelist];
     }
 
     function whitelist(address _whitelistedAddress) public view returns (bool) {
@@ -86,5 +84,14 @@ contract Minter {
         address signer = getAddressFromSignature(_hash, _signature);
         bool userIsWhitelisted = whitelist(signer);
         return userIsWhitelisted;
+    }
+
+    function mintATokenForMeWithASignature(bytes memory _signature) public returns (uint256){
+        bytes32 dataToSign = keccak256(abi.encodePacked(msg.sender, tx.origin, address(this)));
+        bool isWhitelisted = signerIsWhitelisted(dataToSign,_signature);
+        require(isWhitelisted , "address not whitelisted");
+
+        address to = msg.sender;
+        return erc721.mint(to);
     }
 }
