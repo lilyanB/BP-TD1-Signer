@@ -13,9 +13,13 @@ module.exports = {
          url: API_URL_mumbai,
          accounts: [`0x${PRIVATE_KEY}`]
       },
-      goerli:{
+      goerli: {
          url: API_URL_goerli,
          accounts: [`0x${PRIVATE_KEY}`]
-       }
+      },
+      goerli_perso: {
+         url: "http://127.0.0.1:8545",
+         accounts: [`0x${PRIVATE_KEY}`]
+      }
    },
 }

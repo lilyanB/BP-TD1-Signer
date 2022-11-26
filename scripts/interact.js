@@ -24,10 +24,6 @@ const Evaluator = new ethers.Contract(EVALUATOR, contractEvaluator.abi, signer);
 
 async function main() {
   
-  /* const ChangeERC721 = await Minter.changeERC721(ERC721_CONTRACT_ADDRESS);
-  console.log("Result : ", ChangeERC721); */
-
-  
   const erc721 = await Minter.ERC721Address();
   console.log("Address erc721 : ", erc721);
 
@@ -40,36 +36,41 @@ async function main() {
 
   const msg = "0x00000000596f75206e65656420746f207369676e207468697320737472696e67";
   var str = web3.utils.toAscii(msg);
-  console.log(str);
-  console.log(msg);
-  console.log(typeof(msg));
   let ma_signature = await signer.signMessage( str );
   console.log("ma signature : ", ma_signature );
   //const exo2 = await Evaluator.ex2_generateASignature(ma_signature)
   const resultExo2 = await Evaluator.exerciceProgression(PUBLIC_KEY,2);
   console.log("Exo2 fini : ", resultExo2);
-  
-  const exo3 = await Evaluator.ex3_extractAddressFromSignature()
+
+  //const exo3 = await Evaluator.ex3_extractAddressFromSignature()
   const resultExo3 = await Evaluator.exerciceProgression(PUBLIC_KEY,3);
   console.log("Exo3 fini : ", resultExo3);
 
 
-  /* msg2 = "voiciMonMessage"
-  let ma_signature2 = await signer.signMessage( msg2 );
+  //msg2 = "You need to sign this string"
+  msg2 = "0x00000000596f75206e65656420746f207369676e207468697320737472696e67"
+  var str = web3.utils.toAscii(msg);
+  let ma_signature2 = await signer.signMessage( str );
   console.log("ma signature : ", ma_signature2 );
-  const addWhiteList = await Minter.addWhiteList(PUBLIC_KEY);
-  console.log("Address was whitelisted : ", PUBLIC_KEY);
-  const exo4 = await Evaluator.ex4_manageWhiteListWithSignature(msg2,ma_signature2)
-  const resultExo4 = await Evaluator.exerciceProgression(PUBLIC_KEY,4);
-  console.log("Exo4 fini : ", resultExo4); */
+  /* const addWhiteList = await Minter.addUser(PUBLIC_KEY);
+  console.log("Address was whitelisted : ", PUBLIC_KEY); */
+  /* const exo4 = await Evaluator.ex4_manageWhiteListWithSignature(msg2,ma_signature2)*/
+  const resultExo4 = await Evaluator.exerciceProgression(PUBLIC_KEY,4); 
+  console.log("Exo4 fini : ", resultExo4);
 
 
-  /* msg3 = "0x00000000596f75206e65656520746f207369677e20746869732847537269ee67"
-  let ma_signature3 = await signer.signMessage( msg3 );
+  concatener = web3.utils.soliditySha3(EVALUATOR,PUBLIC_KEY,erc721)
+  console.log("address concatener :");
+  console.log(EVALUATOR);
+  console.log(PUBLIC_KEY);
+  console.log(erc721);
+  ma_signature3 = await signer.signMessage( concatener );
+  console.log("concatener : ", concatener );
   console.log("ma signature pour mint : ", ma_signature3 );
   const exo5 = await Evaluator.ex5_mintATokenWithASpecificSignature(ma_signature3);
+  console.log("Exo5 tx : ", exo5);
   const resultExo5 = await Evaluator.exerciceProgression(PUBLIC_KEY,5);
-  console.log("Exo5 fini : ", resultExo5); */
+  console.log("Exo5 fini : ", resultExo5);
 
   /* const exo6 = await Evaluator.ex6_deployBouncerProxyAndWhitelistYourself();
   const resultExo6 = await Evaluator.exerciceProgression(PUBLIC_KEY,6);

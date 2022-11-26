@@ -25,7 +25,7 @@ contract Minter {
     }
 
     function getAddressFromSignature(bytes32 _hash, bytes memory _signature)
-        internal
+        public
         pure
         returns (address)
     {
@@ -87,7 +87,7 @@ contract Minter {
     }
 
     function mintATokenForMeWithASignature(bytes memory _signature) public returns (uint256){
-        bytes32 dataToSign = keccak256(abi.encodePacked(msg.sender, tx.origin, address(this)));
+        bytes32 dataToSign = keccak256(abi.encodePacked(msg.sender, tx.origin, erc721));
         bool isWhitelisted = signerIsWhitelisted(dataToSign,_signature);
         require(isWhitelisted , "address not whitelisted");
 
